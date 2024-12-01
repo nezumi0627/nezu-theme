@@ -152,37 +152,41 @@ export class ThemeManager {
 
     private async configureOpacity() {
         const lang = this.getLanguage();
+        const i18n = strings[lang].ui.placeholders;
+
         const opacity = await vscode.window.showInputBox({
-            prompt: strings[lang].ui.placeholders.enterOpacity,
-            value: this.config.get('opacity', 0.2).toString()
+            prompt: i18n.enterOpacity,
+            value: this.config.get('opacity', 0.2).toString(),
+            validateInput: (value: string) => {
+                const num = parseFloat(value);
+                return (num >= 0 && num <= 0.8) ? null : strings[lang].notifications.opacityError;
+            }
         });
 
         if (opacity) {
             const value = parseFloat(opacity);
-            if (value >= 0 && value <= 0.8) {
-                await this.config.update('opacity', value, true);
-                await this.applyCurrentTheme();
-            } else {
-                vscode.window.showErrorMessage(strings[lang].notifications.opacityError);
-            }
+            await this.config.update('opacity', value, true);
+            await this.applyCurrentTheme();
         }
     }
 
     private async configureBlur() {
         const lang = this.getLanguage();
+        const i18n = strings[lang].ui.placeholders;
+
         const blur = await vscode.window.showInputBox({
-            prompt: strings[lang].ui.placeholders.enterBlur,
-            value: this.config.get('blur', 0).toString()
+            prompt: i18n.enterBlur,
+            value: this.config.get('blur', 0).toString(),
+            validateInput: (value: string) => {
+                const num = parseInt(value);
+                return (num >= 0 && num <= 100) ? null : strings[lang].notifications.blurError;
+            }
         });
 
         if (blur) {
             const value = parseInt(blur);
-            if (value >= 0 && value <= 100) {
-                await this.config.update('blur', value, true);
-                await this.applyCurrentTheme();
-            } else {
-                vscode.window.showErrorMessage(strings[lang].notifications.blurError);
-            }
+            await this.config.update('blur', value, true);
+            await this.applyCurrentTheme();
         }
     }
 
@@ -190,6 +194,8 @@ export class ThemeManager {
         const lang = this.getLanguage();
         const i18n = strings[lang].ui.uiElements;
         const config = vscode.workspace.getConfiguration('nezuTheme');
+
+        // 現在の設定を取得
         const currentSettings = {
             editor: config.get('uiElements.editor', true),
             sidebar: config.get('uiElements.sidebar', true),
@@ -199,6 +205,7 @@ export class ThemeManager {
             titleBar: config.get('uiElements.titleBar', true)
         };
 
+        // QuickPickアイテムを作成
         const items: vscode.QuickPickItem[] = [
             {
                 label: `${currentSettings.editor ? '$(check)' : '$(dash)'} ${i18n.editor}`,
@@ -232,12 +239,14 @@ export class ThemeManager {
             }
         ];
 
+        // QuickPickを表示
         const selected = await vscode.window.showQuickPick(items, {
             canPickMany: true,
-            placeHolder: "Select UI elements to show background"
+            placeHolder: strings[lang].ui.placeholders.selectUIElements
         });
 
         if (selected) {
+            // 新しい設定を作成
             const newSettings = {
                 editor: selected.some(item => item.label.includes(i18n.editor)),
                 sidebar: selected.some(item => item.label.includes(i18n.sidebar)),
@@ -247,10 +256,12 @@ export class ThemeManager {
                 titleBar: selected.some(item => item.label.includes(i18n.titleBar))
             };
 
-            // 設定を更新
-            for (const [key, value] of Object.entries(newSettings)) {
-                await config.update(`uiElements.${key}`, value, true);
-            }
+            // 設定を一括更新
+            await Promise.all(
+                Object.entries(newSettings).map(([key, value]) =>
+                    config.update(`uiElements.${key}`, value, true)
+                )
+            );
 
             // 背景を再適用
             await this.applyCurrentTheme();
@@ -271,19 +282,20 @@ export class ThemeManager {
             // 背景を適用
             const success = await this.backgroundHelper.apply(imagePath, opacity, blur);
             if (success) {
-                // 両方の言語のメッセージを取得
-                const enMessage = strings.en.notifications.reloadPrompt;
-                const jaMessage = strings.ja.notifications.reloadPrompt;
+                // 現在の言語を取得
+                const currentLang = this.config.get('language', 'en') as 'en' | 'ja';
+                const i18n = strings[currentLang].notifications;
 
-                // 両方の言語でメッセージを表示
-                const message = `${enMessage}\n${jaMessage}`;
+                // 設定変更の確認を表示
                 const selected = await vscode.window.showInformationMessage(
-                    message,
-                    'Yes / はい',
-                    'No / いいえ'
+                    i18n.reloadPrompt,
+                    i18n.reloadYes,
+                    i18n.reloadNo
                 );
 
-                if (selected === 'Yes / はい') {
+                if (selected === i18n.reloadYes) {
+                    // 設定を保存してから再起動
+                    await vscode.workspace.saveAll();
                     await vscode.commands.executeCommand('workbench.action.reloadWindow');
                 }
             }

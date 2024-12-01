@@ -1,5 +1,5 @@
 notifications:
-  reloadPrompt: "Background updated. Reload window to apply changes?"
+  reloadPrompt: "Settings updated. Reload window to apply changes?"
   reloadYes: "Yes"
   reloadNo: "No"
   errorPrefix: "Failed to apply theme:"

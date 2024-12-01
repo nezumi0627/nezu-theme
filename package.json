@@ -1,20 +1,14 @@
 {
     "name": "nezu-theme",
     "displayName": "Nezu Theme",
-    "description": "A customizable theme extension for VS Code",
+    "description": "A customizable background theme extension for VS Code",
     "version": "0.0.1",
     "publisher": "nezu",
     "engines": {
-        "vscode": "^1.38.0"
+        "vscode": "^1.75.0"
     },
     "categories": [
         "Themes"
-    ],
-    "activationEvents": [
-        "onStartupFinished",
-        "onCommand:nezu-theme.start",
-        "onCommand:nezu-theme.refresh",
-        "onConfiguration:nezuTheme"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -32,11 +26,6 @@
             {
                 "command": "nezu-theme.refresh",
                 "key": "ctrl+shift+f7"
-            },
-            {
-                "command": "workbench.action.tasks.runTask",
-                "key": "ctrl+shift+b",
-                "args": "Build Extension"
             }
         ],
         "configuration": {
@@ -59,61 +48,51 @@
                 "nezuTheme.imagePath": {
                     "type": "string",
                     "default": "",
-                    "markdownDescription": "%config.imagePath.description%"
+                    "description": "Background image path"
                 },
                 "nezuTheme.autoStatus": {
                     "type": "boolean",
                     "default": false,
-                    "markdownDescription": "%config.autoStatus.description%"
+                    "description": "Automatically change background each time you start"
+                },
+                "nezuTheme.language": {
+                    "type": "string",
+                    "enum": ["en", "ja"],
+                    "default": "en",
+                    "description": "Display language (en/ja)"
                 },
                 "nezuTheme.uiElements.editor": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "%config.uiElements.editor.description%"
+                    "description": "Show background in editor"
                 },
                 "nezuTheme.uiElements.sidebar": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "%config.uiElements.sidebar.description%"
+                    "description": "Show background in sidebar"
                 },
                 "nezuTheme.uiElements.activityBar": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "%config.uiElements.activityBar.description%"
+                    "description": "Show background in activity bar"
                 },
                 "nezuTheme.uiElements.panel": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "%config.uiElements.panel.description%"
+                    "description": "Show background in panel"
                 },
                 "nezuTheme.uiElements.statusBar": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "%config.uiElements.statusBar.description%"
+                    "description": "Show background in status bar"
                 },
                 "nezuTheme.uiElements.titleBar": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "%config.uiElements.titleBar.description%"
-                },
-                "nezuTheme.language": {
-                    "type": "string",
-                    "enum": [
-                        "en",
-                        "ja"
-                    ],
-                    "default": "en",
-                    "description": "Display language (en/ja)"
+                    "description": "Show background in title bar"
                 }
             }
-        },
-        "themes": [
-            {
-                "label": "Nezu Theme",
-                "uiTheme": "vs-dark",
-                "path": "./themes/nezu-theme.json"
-            }
-        ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -123,14 +102,13 @@
         "watch": "tsc -watch -p ./",
         "build": "npm run clean && npm run compile",
         "start": "code --extensionDevelopmentPath=${PWD}",
-        "all": "npm run build && npm run start",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+        "all": "npm run build && npm run start"
     },
     "devDependencies": {
         "@types/fs-extra": "^11.0.4",
         "@types/js-yaml": "^4.0.9",
         "@types/node": "^16.11.7",
-        "@types/vscode": "^1.38.0",
+        "@types/vscode": "^1.75.0",
         "copyfiles": "^2.4.1",
         "mkdirp": "^3.0.1",
         "rimraf": "^5.0.10",

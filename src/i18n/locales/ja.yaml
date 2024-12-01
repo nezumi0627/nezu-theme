@@ -1,5 +1,5 @@
 notifications:
-  reloadPrompt: "背景を更新しました。変更を適用するためにウィンドウを再読み込みしますか？"
+  reloadPrompt: "設定を更新しました。変更を適用するためにウィンドウを再読み込みしますか？"
   reloadYes: "はい"
   reloadNo: "いいえ"
   errorPrefix: "テーマの適用に失敗:"

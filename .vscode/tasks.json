@@ -28,6 +28,10 @@
             "label": "Build Extension",
             "dependsOrder": "sequence",
             "dependsOn": ["Clean", "Compile"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "problemMatcher": []
         },
         {
@@ -37,17 +41,6 @@
             "problemMatcher": []
         },
         {
-            "label": "Watch & Run",
-            "dependsOrder": "sequence",
-            "dependsOn": ["Clean", "Watch", "Run Extension"],
-            "problemMatcher": ["$tsc-watch"],
-            "isBackground": true,
-            "presentation": {
-                "reveal": "always",
-                "panel": "dedicated"
-            }
-        },
-        {
             "label": "All (Clean, Build & Run)",
             "dependsOrder": "sequence",
             "dependsOn": [
@@ -55,10 +48,7 @@
                 "Build Extension",
                 "Run Extension"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "problemMatcher": []
         }
     ]
