@@ -5,9 +5,19 @@ import { UIStyle } from './uiStyle';
 export class StyleManager {
     public static generateCSS(imagePath: string, opacity: number, blur: number): string {
         return `
+            /* すべての要素を透明化 */
+            * {
+                background-color: #00000000 !important;
+            }
+
+            /* 背景画像のスタイル */
             ${BackgroundStyle.generate(imagePath, opacity, blur)}
-            ${EditorStyle.generate()}
+
+            /* 必要な背景色を持つUI要素 */
             ${UIStyle.generate()}
+
+            /* エディタ関連の背景色 */
+            ${EditorStyle.generate()}
         `;
     }
 
