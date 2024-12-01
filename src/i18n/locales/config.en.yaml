@@ -1,0 +1,24 @@
+config:
+  opacity:
+    description: "Background opacity (0 - 0.8)"
+  blur:
+    description: "Background blur (0 - 100)"
+  imagePath:
+    description: "Background image path"
+  autoStatus:
+    description: "Automatically change background each time you start"
+  uiElements:
+    editor:
+      description: "Show background in editor"
+    sidebar:
+      description: "Show background in sidebar"
+    activityBar:
+      description: "Show background in activity bar"
+    panel:
+      description: "Show background in panel"
+    statusBar:
+      description: "Show background in status bar"
+    titleBar:
+      description: "Show background in title bar"
+  language:
+    description: "Display language (en/ja)" 

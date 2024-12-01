@@ -1,0 +1,66 @@
+# 拡張機能の設定型
+ThemeConfig:
+  opacity:
+    type: number
+    description: 背景の不透明度
+    range: [0, 0.8]
+  blur:
+    type: number
+    description: 背景のぼかし効果
+    range: [0, 100]
+  imagePath:
+    type: string
+    description: 背景画像のパス
+  autoStatus:
+    type: boolean
+    description: 起動時の自動更新
+  uiElements:
+    type: object
+    properties:
+      editor:
+        type: boolean
+        description: エディタの背景表示
+      sidebar:
+        type: boolean
+        description: サイドバーの背景表示
+      activityBar:
+        type: boolean
+        description: アクティビティバーの背景表示
+      panel:
+        type: boolean
+        description: パネルの背景表示
+      statusBar:
+        type: boolean
+        description: ステータスバーの背景表示
+      titleBar:
+        type: boolean
+        description: タイトルバーの背景表示
+  language:
+    type: string
+    enum: [en, ja]
+    description: 表示言語
+
+# スタイル関連の型
+StyleOptions:
+  imagePath:
+    type: string
+    description: 背景画像のパス
+  opacity:
+    type: number
+    description: 不透明度
+    range: [0, 0.8]
+  blur:
+    type: number
+    description: ぼかし効果
+    range: [0, 100]
+
+# 通知関連の型
+NotificationOptions:
+  message:
+    type: string
+    description: 通知メッセージ
+  buttons:
+    type: array
+    items:
+      type: string
+    description: 通知のボタン 

@@ -2,6 +2,8 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { BackgroundHelper } from './backgroundHelper';
+import { NotificationHelper } from './helpers/notificationHelper';
+import { strings } from './i18n/loader';
 
 export class ThemeManager {
     private config = vscode.workspace.getConfiguration('nezuTheme');
@@ -11,35 +13,46 @@ export class ThemeManager {
         this.backgroundHelper = new BackgroundHelper();
     }
 
+    private getLanguage(): 'en' | 'ja' {
+        return this.config.get('language', 'en') as 'en' | 'ja';
+    }
+
     public async showThemeOptions() {
+        const lang = this.getLanguage();
+        const i18n = strings[lang].ui;
+
         const options: vscode.QuickPickItem[] = [
             {
-                label: "$(file-media) Select Background Image",
-                description: "Choose a background image"
+                label: `$(file-media) ${i18n.selectImage}`,
+                description: i18n.selectImageDesc
             },
             {
-                label: "$(folder) Select Image Directory",
-                description: "Choose a directory with images"
+                label: `$(folder) ${i18n.selectDir}`,
+                description: i18n.selectDirDesc
             },
             {
-                label: "$(settings) Configure Opacity",
-                description: "Set background opacity (0-0.8)"
+                label: `$(settings) ${i18n.configOpacity}`,
+                description: i18n.configOpacityDesc
             },
             {
-                label: "$(settings) Configure Blur",
-                description: "Set background blur (0-100)"
+                label: `$(settings) ${i18n.configBlur}`,
+                description: i18n.configBlurDesc
+            },
+            {
+                label: `$(list-selection) ${i18n.configUI}`,
+                description: i18n.configUIDesc
             }
         ];
 
         if (this.config.get('autoStatus')) {
             options.push({
-                label: "$(sync) Disable Auto Update",
-                description: "Disable automatic background update on startup"
+                label: `$(sync) ${i18n.disableAuto}`,
+                description: i18n.disableAutoDesc
             });
         } else {
             options.push({
-                label: "$(sync) Enable Auto Update",
-                description: "Enable automatic background update on startup"
+                label: `$(sync) ${i18n.enableAuto}`,
+                description: i18n.enableAutoDesc
             });
         }
 
@@ -49,23 +62,26 @@ export class ThemeManager {
 
         if (selected) {
             switch (selected.label) {
-                case "$(file-media) Select Background Image":
+                case `$(file-media) ${i18n.selectImage}`:
                     await this.selectBackgroundImage();
                     break;
-                case "$(folder) Select Image Directory":
+                case `$(folder) ${i18n.selectDir}`:
                     await this.selectImageDirectory();
                     break;
-                case "$(settings) Configure Opacity":
+                case `$(settings) ${i18n.configOpacity}`:
                     await this.configureOpacity();
                     break;
-                case "$(settings) Configure Blur":
+                case `$(settings) ${i18n.configBlur}`:
                     await this.configureBlur();
                     break;
-                case "$(sync) Enable Auto Update":
+                case `$(sync) ${i18n.enableAuto}`:
                     await this.config.update('autoStatus', true, true);
                     break;
-                case "$(sync) Disable Auto Update":
+                case `$(sync) ${i18n.disableAuto}`:
                     await this.config.update('autoStatus', false, true);
+                    break;
+                case `$(list-selection) ${i18n.configUI}`:
+                    await this.configureUIElements();
                     break;
             }
         }
@@ -135,8 +151,9 @@ export class ThemeManager {
     }
 
     private async configureOpacity() {
+        const lang = this.getLanguage();
         const opacity = await vscode.window.showInputBox({
-            prompt: "Enter opacity value (0-0.8)",
+            prompt: strings[lang].ui.placeholders.enterOpacity,
             value: this.config.get('opacity', 0.2).toString()
         });
 
@@ -146,14 +163,15 @@ export class ThemeManager {
                 await this.config.update('opacity', value, true);
                 await this.applyCurrentTheme();
             } else {
-                vscode.window.showErrorMessage('Opacity must be between 0 and 0.8');
+                vscode.window.showErrorMessage(strings[lang].notifications.opacityError);
             }
         }
     }
 
     private async configureBlur() {
+        const lang = this.getLanguage();
         const blur = await vscode.window.showInputBox({
-            prompt: "Enter blur value (0-100)",
+            prompt: strings[lang].ui.placeholders.enterBlur,
             value: this.config.get('blur', 0).toString()
         });
 
@@ -163,8 +181,79 @@ export class ThemeManager {
                 await this.config.update('blur', value, true);
                 await this.applyCurrentTheme();
             } else {
-                vscode.window.showErrorMessage('Blur must be between 0 and 100');
+                vscode.window.showErrorMessage(strings[lang].notifications.blurError);
             }
+        }
+    }
+
+    private async configureUIElements() {
+        const lang = this.getLanguage();
+        const i18n = strings[lang].ui.uiElements;
+        const config = vscode.workspace.getConfiguration('nezuTheme');
+        const currentSettings = {
+            editor: config.get('uiElements.editor', true),
+            sidebar: config.get('uiElements.sidebar', true),
+            activityBar: config.get('uiElements.activityBar', true),
+            panel: config.get('uiElements.panel', true),
+            statusBar: config.get('uiElements.statusBar', true),
+            titleBar: config.get('uiElements.titleBar', true)
+        };
+
+        const items: vscode.QuickPickItem[] = [
+            {
+                label: `${currentSettings.editor ? '$(check)' : '$(dash)'} ${i18n.editor}`,
+                picked: currentSettings.editor,
+                description: i18n.editorDesc
+            },
+            {
+                label: `${currentSettings.sidebar ? '$(check)' : '$(dash)'} ${i18n.sidebar}`,
+                picked: currentSettings.sidebar,
+                description: i18n.sidebarDesc
+            },
+            {
+                label: `${currentSettings.activityBar ? '$(check)' : '$(dash)'} ${i18n.activityBar}`,
+                picked: currentSettings.activityBar,
+                description: i18n.activityBarDesc
+            },
+            {
+                label: `${currentSettings.panel ? '$(check)' : '$(dash)'} ${i18n.panel}`,
+                picked: currentSettings.panel,
+                description: i18n.panelDesc
+            },
+            {
+                label: `${currentSettings.statusBar ? '$(check)' : '$(dash)'} ${i18n.statusBar}`,
+                picked: currentSettings.statusBar,
+                description: i18n.statusBarDesc
+            },
+            {
+                label: `${currentSettings.titleBar ? '$(check)' : '$(dash)'} ${i18n.titleBar}`,
+                picked: currentSettings.titleBar,
+                description: i18n.titleBarDesc
+            }
+        ];
+
+        const selected = await vscode.window.showQuickPick(items, {
+            canPickMany: true,
+            placeHolder: "Select UI elements to show background"
+        });
+
+        if (selected) {
+            const newSettings = {
+                editor: selected.some(item => item.label.includes(i18n.editor)),
+                sidebar: selected.some(item => item.label.includes(i18n.sidebar)),
+                activityBar: selected.some(item => item.label.includes(i18n.activityBar)),
+                panel: selected.some(item => item.label.includes(i18n.panel)),
+                statusBar: selected.some(item => item.label.includes(i18n.statusBar)),
+                titleBar: selected.some(item => item.label.includes(i18n.titleBar))
+            };
+
+            // 設定を更新
+            for (const [key, value] of Object.entries(newSettings)) {
+                await config.update(`uiElements.${key}`, value, true);
+            }
+
+            // 背景を再適用
+            await this.applyCurrentTheme();
         }
     }
 
@@ -173,25 +262,33 @@ export class ThemeManager {
         const opacity = this.config.get<number>('opacity', 0.2);
         const blur = this.config.get<number>('blur', 0);
 
-        if (!imagePath) {
-            await this.backgroundHelper.remove();
+        // 設定が未定義の場合は何もしない
+        if (!imagePath || imagePath.trim() === '') {
             return;
         }
 
         try {
+            // 背景を適用
             const success = await this.backgroundHelper.apply(imagePath, opacity, blur);
             if (success) {
-                const result = await vscode.window.showInformationMessage(
-                    'Background updated. Reload window to apply changes?',
-                    'Yes',
-                    'No'
+                // 両方の言語のメッセージを取得
+                const enMessage = strings.en.notifications.reloadPrompt;
+                const jaMessage = strings.ja.notifications.reloadPrompt;
+
+                // 両方の言語でメッセージを表示
+                const message = `${enMessage}\n${jaMessage}`;
+                const selected = await vscode.window.showInformationMessage(
+                    message,
+                    'Yes / はい',
+                    'No / いいえ'
                 );
-                if (result === 'Yes') {
+
+                if (selected === 'Yes / はい') {
                     await vscode.commands.executeCommand('workbench.action.reloadWindow');
                 }
             }
         } catch (error) {
-            vscode.window.showErrorMessage(`Failed to apply theme: ${error}`);
+            await NotificationHelper.showError(error);
         }
     }
 } 

@@ -51,29 +51,82 @@
                 "nezuTheme.imagePath": {
                     "type": "string",
                     "default": "",
-                    "description": "Background image path"
+                    "markdownDescription": "%config.imagePath.description%"
                 },
                 "nezuTheme.autoStatus": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Automatically change background each time you start"
+                    "markdownDescription": "%config.autoStatus.description%"
+                },
+                "nezuTheme.uiElements.editor": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "%config.uiElements.editor.description%"
+                },
+                "nezuTheme.uiElements.sidebar": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "%config.uiElements.sidebar.description%"
+                },
+                "nezuTheme.uiElements.activityBar": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "%config.uiElements.activityBar.description%"
+                },
+                "nezuTheme.uiElements.panel": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "%config.uiElements.panel.description%"
+                },
+                "nezuTheme.uiElements.statusBar": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "%config.uiElements.statusBar.description%"
+                },
+                "nezuTheme.uiElements.titleBar": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "%config.uiElements.titleBar.description%"
+                },
+                "nezuTheme.language": {
+                    "type": "string",
+                    "enum": [
+                        "en",
+                        "ja"
+                    ],
+                    "default": "en",
+                    "description": "Display language (en/ja)"
                 }
             }
-        }
+        },
+        "themes": [
+            {
+                "label": "Nezu Theme",
+                "uiTheme": "vs-dark",
+                "path": "./themes/nezu-theme.json"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
+        "compile": "npm run clean && tsc -p ./ && npm run copy-files",
+        "clean": "rimraf out/",
+        "copy-files": "copyfiles -f \"src/i18n/locales/*.yaml\" \"out/i18n/locales\"",
         "watch": "tsc -watch -p ./",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
         "@types/fs-extra": "^11.0.4",
+        "@types/js-yaml": "^4.0.9",
         "@types/node": "^16.11.7",
         "@types/vscode": "^1.38.0",
+        "copyfiles": "^2.4.1",
+        "mkdirp": "^3.0.1",
+        "rimraf": "^5.0.10",
         "typescript": "^4.5.4"
     },
     "dependencies": {
-        "fs-extra": "^11.2.0"
+        "fs-extra": "^11.2.0",
+        "js-yaml": "^4.1.0"
     }
 }
