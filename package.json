@@ -11,7 +11,10 @@
         "Themes"
     ],
     "activationEvents": [
-        "*"
+        "onStartupFinished",
+        "onCommand:nezu-theme.start",
+        "onCommand:nezu-theme.refresh",
+        "onConfiguration:nezuTheme"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -29,6 +32,11 @@
             {
                 "command": "nezu-theme.refresh",
                 "key": "ctrl+shift+f7"
+            },
+            {
+                "command": "workbench.action.tasks.runTask",
+                "key": "ctrl+shift+b",
+                "args": "Build Extension"
             }
         ],
         "configuration": {
@@ -113,6 +121,9 @@
         "clean": "rimraf out/",
         "copy-files": "copyfiles -f \"src/i18n/locales/*.yaml\" \"out/i18n/locales\"",
         "watch": "tsc -watch -p ./",
+        "build": "npm run clean && npm run compile",
+        "start": "code --extensionDevelopmentPath=${PWD}",
+        "all": "npm run build && npm run start",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {

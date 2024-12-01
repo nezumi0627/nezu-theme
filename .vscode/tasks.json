@@ -2,17 +2,64 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Clean",
+            "type": "npm",
+            "script": "clean",
+            "problemMatcher": []
+        },
+        {
+            "label": "Compile",
+            "type": "npm",
+            "script": "compile",
+            "problemMatcher": ["$tsc"]
+        },
+        {
+            "label": "Watch",
             "type": "npm",
             "script": "watch",
-            "problemMatcher": "$tsc-watch",
+            "isBackground": true,
+            "problemMatcher": ["$tsc-watch"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "Build Extension",
+            "dependsOrder": "sequence",
+            "dependsOn": ["Clean", "Compile"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Extension",
+            "type": "shell",
+            "command": "code --extensionDevelopmentPath=${workspaceFolder}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Watch & Run",
+            "dependsOrder": "sequence",
+            "dependsOn": ["Clean", "Watch", "Run Extension"],
+            "problemMatcher": ["$tsc-watch"],
             "isBackground": true,
             "presentation": {
-                "reveal": "never"
-            },
+                "reveal": "always",
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "All (Clean, Build & Run)",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Clean",
+                "Build Extension",
+                "Run Extension"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "problemMatcher": []
         }
     ]
 }

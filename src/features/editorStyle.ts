@@ -1,18 +1,24 @@
+import * as vscode from 'vscode';
+
 // エディタ関連のスタイル生成を担当
 export class EditorStyle {
     public static generate(): string {
+        const config = vscode.workspace.getConfiguration('nezuTheme');
+        const editorEnabled = config.get('uiElements.editor', true);
+
         return `
-        /* エロィタの影を削除 */
+        /* エディタの影を削除 */
         .monaco-editor,
         .monaco-editor .overflow-guard,
         .monaco-editor-background,
         .monaco-workbench .part.editor > .content {
             box-shadow: none !important;
+            background-color: ${editorEnabled ? 'transparent' : '#1e1e1e'} !important;
         }
 
         /* エディタの実際のテキスト領域 */
         .monaco-editor .overflow-guard > .monaco-scrollable-element {
-            background-color: rgba(30, 30, 30, 0.6) !important;
+            background-color: ${editorEnabled ? 'rgba(30, 30, 30, 0.6)' : '#1e1e1e'} !important;
             box-shadow: none !important;
         }
 
@@ -29,7 +35,7 @@ export class EditorStyle {
         .monaco-editor .margin,
         .monaco-editor .glyph-margin,
         .monaco-editor .margin-view-overlays {
-            background-color: rgba(30, 30, 30, 0.6) !important;
+            background-color: ${editorEnabled ? 'rgba(30, 30, 30, 0.6)' : '#1e1e1e'} !important;
             box-shadow: none !important;
         }
 
