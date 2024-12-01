@@ -1,0 +1,79 @@
+{
+    "name": "nezu-theme",
+    "displayName": "Nezu Theme",
+    "description": "A customizable theme extension for VS Code",
+    "version": "0.0.1",
+    "publisher": "nezu",
+    "engines": {
+        "vscode": "^1.38.0"
+    },
+    "categories": [
+        "Themes"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "nezu-theme.start",
+                "title": "Nezu Theme - Configure"
+            },
+            {
+                "command": "nezu-theme.refresh",
+                "title": "Nezu Theme - Refresh"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "nezu-theme.refresh",
+                "key": "ctrl+shift+f7"
+            }
+        ],
+        "configuration": {
+            "title": "Nezu Theme",
+            "properties": {
+                "nezuTheme.opacity": {
+                    "type": "number",
+                    "maximum": 0.8,
+                    "minimum": 0,
+                    "default": 0.2,
+                    "description": "Background opacity (0 - 0.8)"
+                },
+                "nezuTheme.blur": {
+                    "type": "number",
+                    "maximum": 100,
+                    "minimum": 0,
+                    "default": 0,
+                    "description": "Background blur (0 - 100)"
+                },
+                "nezuTheme.imagePath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Background image path"
+                },
+                "nezuTheme.autoStatus": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Automatically change background each time you start"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "@types/fs-extra": "^11.0.4",
+        "@types/node": "^16.11.7",
+        "@types/vscode": "^1.38.0",
+        "typescript": "^4.5.4"
+    },
+    "dependencies": {
+        "fs-extra": "^11.2.0"
+    }
+}

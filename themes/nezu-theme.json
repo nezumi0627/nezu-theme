@@ -1,0 +1,38 @@
+{
+    "name": "Nezu Theme",
+    "type": "dark",
+    "colors": {
+        "editor.background": "#1E1E1E",
+        "editor.foreground": "#D4D4D4",
+        "activityBar.background": "#1E1E1E",
+        "sideBar.background": "#1E1E1E",
+        "statusBar.background": "#1E1E1E",
+        "titleBar.activeBackground": "#1E1E1E"
+    },
+    "tokenColors": [
+        {
+            "scope": [
+                "comment"
+            ],
+            "settings": {
+                "foreground": "#6A9955"
+            }
+        },
+        {
+            "scope": [
+                "string"
+            ],
+            "settings": {
+                "foreground": "#CE9178"
+            }
+        },
+        {
+            "scope": [
+                "keyword"
+            ],
+            "settings": {
+                "foreground": "#569CD6"
+            }
+        }
+    ]
+}
