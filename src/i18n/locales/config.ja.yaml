@@ -1,0 +1,24 @@
+config:
+  opacity:
+    description: "背景の不透明度 (0 - 0.8)"
+  blur:
+    description: "背景のぼかし効果 (0 - 100)"
+  imagePath:
+    description: "背景画像のパス"
+  autoStatus:
+    description: "起動時に自動的に背景を変更"
+  uiElements:
+    editor:
+      description: "エディタに背景を表示"
+    sidebar:
+      description: "サイドバーに背景を表示"
+    activityBar:
+      description: "アクティビティバーに背景を表示"
+    panel:
+      description: "パネルに背景を表示"
+    statusBar:
+      description: "ステータスバーに背景を表示"
+    titleBar:
+      description: "タイトルバーに背景を表示"
+  language:
+    description: "表示言語 (en/ja)" 
